@@ -1,9 +1,9 @@
 package com.example.demo.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +22,8 @@ import com.example.demo.model.requests.CreateUserRequest;
 @RequestMapping("/api/user")
 public class UserController {
 	
+	private Logger log = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -33,24 +35,37 @@ public class UserController {
 
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
-		return ResponseEntity.of(userRepository.findById(id));
+		log.debug("Retrieving user by ID...");
+		
+		User user = userRepository.findById(id).get();
+		
+		log.debug("User retrieved by ID successfully.");
+
+		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
 	}
 	
 	@GetMapping("/{username}")
 	public ResponseEntity<User> findByUserName(@PathVariable String username) {
+		log.debug("Retrieving user by username...");
+		
 		User user = userRepository.findByUsername(username);
+		
+		log.debug("User retrieved by username successfully.");
+		
 		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
 	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
+		log.debug("Creating user...");
+		
 		User user = new User();
 		Cart cart = new Cart();
 		user.setUsername(createUserRequest.getUsername());
 		
 		if(!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword()) ||
 				createUserRequest.getPassword().length() < 8) {
-			System.err.println("Error creating user.");			
+			log.info("Password does not pass valid password criteria.");			
 			return ResponseEntity.badRequest().build();
 		}	
 
@@ -59,6 +74,9 @@ public class UserController {
 		cartRepository.save(cart);
 		user.setCart(cart);
 		userRepository.save(user);
+		
+		log.debug("User created successfully.");
+		
 		return ResponseEntity.ok(user);
 	}
 	

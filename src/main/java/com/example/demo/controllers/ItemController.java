@@ -2,6 +2,8 @@ package com.example.demo.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,26 +17,48 @@ import com.example.demo.model.persistence.repositories.ItemRepository;
 @RestController
 @RequestMapping("/api/item")
 public class ItemController {
-
+	private Logger log = LoggerFactory.getLogger(ItemController.class);
+	
 	@Autowired
 	private ItemRepository itemRepository;
 	
 	@GetMapping
 	public ResponseEntity<List<Item>> getItems() {
-		return ResponseEntity.ok(itemRepository.findAll());
+		log.debug("Retrieving items...");
+		
+		List<Item> items = itemRepository.findAll();
+		
+		log.debug("Items retrieved successfully.");		
+		
+		return ResponseEntity.ok(items);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Item> getItemById(@PathVariable Long id) {
-		return ResponseEntity.of(itemRepository.findById(id));
+		log.debug("Retrieving item by ID...");
+		
+		Item item = itemRepository.findById(id).get();
+		
+		log.debug("Item retrieved by ID successfully.");
+		
+		return ResponseEntity.ok(item);
 	}
 	
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<Item>> getItemsByName(@PathVariable String name) {
+		log.debug("Retrieving items by name...");
+		
 		List<Item> items = itemRepository.findByName(name);
-		return items == null || items.isEmpty() ? ResponseEntity.notFound().build()
-				: ResponseEntity.ok(items);
-			
+		
+		log.debug("Items retrieved by name successfully.");
+		
+		if(items == null || items.isEmpty()) {
+			log.info("Item " + name + " does not exist.");			
+			return ResponseEntity.notFound().build();
+		}
+		else {
+			return ResponseEntity.ok(items);
+		}	
 	}
 	
 }
