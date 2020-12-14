@@ -24,36 +24,36 @@ public class ItemController {
 	
 	@GetMapping
 	public ResponseEntity<List<Item>> getItems() {
-		log.debug("Retrieving items...");
+		log.info("Retrieving items...");
 		
 		List<Item> items = itemRepository.findAll();
 		
-		log.debug("Items retrieved successfully.");		
+		log.info("Items retrieved successfully.");		
 		
 		return ResponseEntity.ok(items);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Item> getItemById(@PathVariable Long id) {
-		log.debug("Retrieving item by ID...");
+		log.info("Retrieving item by ID...");
 		
 		Item item = itemRepository.findById(id).get();
 		
-		log.debug("Item retrieved by ID successfully.");
+		log.info("Item retrieved by ID successfully.");
 		
 		return ResponseEntity.ok(item);
 	}
 	
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<Item>> getItemsByName(@PathVariable String name) {
-		log.debug("Retrieving items by name...");
+		log.info("Retrieving items by name...");
 		
 		List<Item> items = itemRepository.findByName(name);
 		
-		log.debug("Items retrieved by name successfully.");
+		log.info("Items retrieved by name successfully.");
 		
 		if(items == null || items.isEmpty()) {
-			log.info("Item " + name + " does not exist.");			
+			log.error("Item " + name + " does not exist.");			
 			return ResponseEntity.notFound().build();
 		}
 		else {

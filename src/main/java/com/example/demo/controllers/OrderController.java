@@ -31,36 +31,36 @@ public class OrderController {
 	
 	@PostMapping("/submit/{username}")
 	public ResponseEntity<UserOrder> submit(@PathVariable String username) {
-		log.debug("Submitting order...");
+		log.info("Submitting order...");
 		
 		User user = userRepository.findByUsername(username);
 		if(user == null) {
-			log.info("User " + username + " does not exist.");
+			log.error("User " + username + " does not exist.");
 			return ResponseEntity.notFound().build();
 		}
 		UserOrder order = UserOrder.createFromCart(user.getCart());
 		orderRepository.save(order);
 		
-		log.debug("Order submitted successfully.");
+		log.info("Order submitted successfully.");
 		
 		return ResponseEntity.ok(order);
 	}
 	
 	@GetMapping("/history/{username}")
 	public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username) {
-		log.debug("Retrieving order history...");
+		log.info("Retrieving order history...");
 		
 		User user = userRepository.findByUsername(username);
 		List<UserOrder> userHistory = null; 
 		
 		if(user == null) {
-			log.info("User " + username + " does not exist.");
+			log.error("User " + username + " does not exist.");
 			return ResponseEntity.notFound().build();
 		}
 		
 		userHistory = orderRepository.findByUser(user);
 		
-		log.debug("Order history retrieved successfully.");
+		log.info("Order history retrieved successfully.");
 		
 		return ResponseEntity.ok(userHistory);
 	}

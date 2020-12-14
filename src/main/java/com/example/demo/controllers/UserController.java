@@ -20,8 +20,7 @@ import com.example.demo.model.requests.CreateUserRequest;
 
 @RestController
 @RequestMapping("/api/user")
-public class UserController {
-	
+public class UserController {	
 	private Logger log = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
@@ -35,29 +34,29 @@ public class UserController {
 
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
-		log.debug("Retrieving user by ID...");
+		log.info("Retrieving user by ID...");
 		
 		User user = userRepository.findById(id).get();
 		
-		log.debug("User retrieved by ID successfully.");
+		log.info("User retrieved by ID successfully.");
 
 		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
 	}
 	
 	@GetMapping("/{username}")
 	public ResponseEntity<User> findByUserName(@PathVariable String username) {
-		log.debug("Retrieving user by username...");
+		log.info("Retrieving user by username...");
 		
 		User user = userRepository.findByUsername(username);
 		
-		log.debug("User retrieved by username successfully.");
+		log.info("User retrieved by username successfully.");
 		
 		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
 	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
-		log.debug("Creating user...");
+		log.info("Creating user...");
 		
 		User user = new User();
 		Cart cart = new Cart();
@@ -65,7 +64,7 @@ public class UserController {
 		
 		if(!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword()) ||
 				createUserRequest.getPassword().length() < 8) {
-			log.info("Password does not pass valid password criteria.");			
+			log.error("Password does not pass valid password criteria.");			
 			return ResponseEntity.badRequest().build();
 		}	
 
@@ -75,7 +74,7 @@ public class UserController {
 		user.setCart(cart);
 		userRepository.save(user);
 		
-		log.debug("User created successfully.");
+		log.info("User created successfully.");
 		
 		return ResponseEntity.ok(user);
 	}
