@@ -24,7 +24,7 @@
   
     <Loggers>      
         <Logger name="com.example.demo" additivity="false" level="debug">
-            <AppenderRef ref="appLog" level="info"/>
+            <AppenderRef ref="appLog" level="off"/>
             <AppenderRef ref="console" level="debug"/>
         </Logger>             
         <Root level="warn">
