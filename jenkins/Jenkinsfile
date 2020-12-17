@@ -2,7 +2,7 @@ pipeline {
     agent none
 
     stages {
-        stage('Build') {
+        stage('Compile') {
             agent {
                 docker {
                     image 'maven'
@@ -10,7 +10,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn -DskipTests clean package'
+                sh 'mvn compile'
             }
         }
         stage('Test') {
@@ -21,17 +21,16 @@ pipeline {
                 }
             }
             steps {
-                echo 'Testing'
+                sh 'mvn test'
             }
             /*
-            sh 'mvn test'
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'
                 }
             }*/
         }
-        stage('Deploy') {
+        stage('Package') {
             agent {
                 dockerfile {
                     args '--publish 8080:8080'
@@ -39,8 +38,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker build --tag my-app .'
-                sh 'docker run --publish 8080:8080 my-app'
+                echo 'Deploying'
             }
         }
     }
