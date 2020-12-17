@@ -34,7 +34,7 @@ pipeline {
         stage('Deploy') {
             agent {
                 dockerfile {
-                    additionalBuildArgs '--tag my-app'
+                    additionalBuildArgs '--build-arg tag="my-app"'
                     args '--publish 8080:8080'
                     filename 'Dockerfile'
                 }
