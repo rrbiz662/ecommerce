@@ -42,6 +42,7 @@ pipeline {
             }
         }
         stage('Deploy') {
+            agent any
             steps {
                 sh 'docker build --tag my-app .'
                 sh 'docker run --detach --rm --publish 8080:8080 my-app'
