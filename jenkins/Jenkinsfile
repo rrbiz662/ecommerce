@@ -24,6 +24,7 @@ pipeline {
                 echo 'Testing'
             }
             /*
+            sh 'mvn test'
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'
@@ -34,7 +35,7 @@ pipeline {
             agent {
                 dockerfile {
                     additionalBuildArgs '--tag my-app'
-                    args '--publish 8080:8080'
+                    args '--publish 8080:8080 --entrypoint'
                     filename 'Dockerfile'
                 }
             }
