@@ -38,13 +38,9 @@ pipeline {
                 }
             }
             steps {
-                echo 'package...'
-                /*
                 sh 'mvn package'
-                */
             }
         }
-        /*
         stage('Deploy') {
             agent {
                 dockerfile {
@@ -56,6 +52,5 @@ pipeline {
                 echo 'Application successfully  deployed.'
             }
         }
-        */
     }
 }
