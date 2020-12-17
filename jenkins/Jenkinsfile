@@ -35,7 +35,7 @@ pipeline {
             agent {
                 dockerfile {
                     additionalBuildArgs '--tag my-app'
-                    args '--publish 8080:8080 --entrypoint='
+                    args '--publish 8080:8080 --entrypoint=["java","-jar","app.jar"]'
                     filename 'Dockerfile'
                 }
             }
