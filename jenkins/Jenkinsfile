@@ -39,7 +39,8 @@ pipeline {
                 }
             }
             steps {
-                echo 'app deployed'
+                sh 'docker build --tag my-app .'
+                sh 'docker run --publish 8080:8080 my-app'
             }
         }
     }
