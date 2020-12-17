@@ -42,14 +42,9 @@ pipeline {
             }
         }
         stage('Deploy') {
-            agent {
-                dockerfile {
-                    args '--publish 8080:8080 --detach --rm --entrypoint'
-                    filename 'Dockerfile'
-                }
-            }
             steps {
-                echo 'Application successfully  deployed!!!'
+                sh 'docker build --tag my-app .'
+                sh 'docker run --detach --rm --publish 8080:8080 my-app'
             }
         }
     }
