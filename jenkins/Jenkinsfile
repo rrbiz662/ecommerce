@@ -9,11 +9,13 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                echo 'Building...'
+                /*
                 sh 'mvn -DskipTests clean package'
+                */
             }
         }
         stage('Test') {
-
             steps {
                 echo 'Testing'
             }
@@ -26,8 +28,10 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying'
+                sh 'docker build --tag ecommerce-app .'
+                sh 'docker run --publish 8080:8080 ecommerce-app'
                 /*
+                echo 'Deploying'
                 sh "chmod +x -R ${env.WORKSPACE}"
                 sh './jenkins/scripts/deliver.sh'
                 */
