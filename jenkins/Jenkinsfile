@@ -1,21 +1,25 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven'
-            args '--volume /root/.m2:/root/.m2'
-        }
-    }
+    agent none
 
     stages {
         stage('Build') {
+            agent {
+                docker {
+                    image 'maven'
+                    args '--volume /root/.m2:/root/.m2'
+                }
+            }
             steps {
-                echo 'Building...'
-                /*
                 sh 'mvn -DskipTests clean package'
-                */
             }
         }
         stage('Test') {
+            agent {
+                docker {
+                    image 'maven'
+                    args '--volume /root/.m2:/root/.m2'
+                }
+            }
             steps {
                 echo 'Testing'
             }
@@ -27,14 +31,15 @@ pipeline {
             }*/
         }
         stage('Deploy') {
+            agent {
+                dockerfile {
+                    additionalBuildArgs '--tag my-app'
+                    args '--publish 8080:8080'
+                    filename 'Dockerfile'
+                }
+            }
             steps {
-                sh 'docker build --tag ecommerce-app .'
-                sh 'docker run --publish 8080:8080 ecommerce-app'
-                /*
-                echo 'Deploying'
-                sh "chmod +x -R ${env.WORKSPACE}"
-                sh './jenkins/scripts/deliver.sh'
-                */
+                echo 'app deployed'
             }
         }
     }
