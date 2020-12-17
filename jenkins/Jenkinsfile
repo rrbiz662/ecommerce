@@ -30,31 +30,5 @@ pipeline {
                 }
             }
         }
-        stage('Package') {
-            agent {
-                docker {
-                    image 'maven'
-                    args '--volume /root/.m2:/root/.m2'
-                }
-            }
-            steps {
-                echo 'package...'
-                /*
-                sh 'mvn package'
-                */
-            }
-        }
-        /*
-        stage('Deploy') {
-            agent {
-                dockerfile {
-                    args '--publish 8080:8080 --detach -- rm'
-                    filename 'Dockerfile'
-                }
-            }
-            steps {
-                echo 'Application successfully  deployed.'
-            }
-        }*/
     }
 }
