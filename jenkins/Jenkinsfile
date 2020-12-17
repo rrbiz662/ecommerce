@@ -44,12 +44,12 @@ pipeline {
         stage('Deploy') {
             agent {
                 dockerfile {
-                    args '--publish 8080:8080 --detach --rm'
+                    args '--publish 8080:8080 --detach'
                     filename 'Dockerfile'
                 }
             }
             steps {
-                echo 'Application successfully  deployed.'
+                echo 'Application successfully  deployed!!!'
             }
         }
     }
