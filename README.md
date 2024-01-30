@@ -7,7 +7,7 @@ First, you'll want to get set up with the template. The template is written in J
 
 To use the template, import it in the IDE of your choice as a Spring Boot application. Where required, this readme assumes the eclipse IDE.
 
-Once project is set up, you will see 5 packages:
+Once the project is set up, you will see 5 packages:
 
 * demo - this package contains the main method which runs the application
 
